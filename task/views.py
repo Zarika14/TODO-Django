@@ -8,6 +8,7 @@ from task.models import Task
 
 def create_task(request):
     try:
+
         if request.method != 'POST' :
             raise Exception(f'{request.method} method not allowed')
         
@@ -38,9 +39,29 @@ def create_task(request):
         return JsonResponse({'message' : str(e)}, status = 400 )
     
     
+    
 
 
-def get_particular_task_details(request, **kwargs) : 
-    # print(id)
-    return JsonResponse({}, status = 200)
+def get_particular_task_details(request, id) : 
+    try :
+        if request.method != 'GET' :
+            raise Exception(f'{request.method} method not allowed')
+        
+        
+        if not Task.objects.filter(id = id).exists() :
+            raise Exception('task not found')
+        
+        task = Task.objects.get(id = id)
+        data = model_to_dict(task)
+        
+        data['created_at'] = task.created_at
+        data['updated_at'] = task.updated_at
+            
+        return JsonResponse({'message' : data}, status = 200)
+
+    
+    except Exception as e:
+        return JsonResponse({'message' : str(e)}, status = 400)
+    
+
     
