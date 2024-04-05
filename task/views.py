@@ -45,7 +45,7 @@ def create_task(request):
 def get_particular_task_details(request, id) : 
     try :
         if request.method != 'GET' :
-            raise Exception(f'{request.method} method not allowed')
+            raise Exception(f'{request.method} Method not allowed')
         
         
         if not Task.objects.filter(id = id).exists() :
@@ -64,4 +64,90 @@ def get_particular_task_details(request, id) :
         return JsonResponse({'message' : str(e)}, status = 400)
     
 
+def update_task(request, id):
+    try:
     
+        if request.method != 'PUT':
+            raise Exception(f'{request.method},method not allowed')
+        
+        if not Task.objects.filter(id = id).exists():
+            raise Exception("Task not found")
+        
+        if not request.body :
+            raise Exception('request body not found')
+        
+        data = json.loads(request.body)
+   
+   
+        title = data.get('title')
+        description = data.get('description')
+        status = data.get('status', False)
+        
+        
+        task = Task.objects.get(id = id)
+        
+        if title :
+            task.title = title
+        
+        if description :
+            task.description = description
+        
+        if status != None :
+            status = status
+        
+        task.save()
+        
+        data = model_to_dict(task)
+        
+        return JsonResponse({'message' : data}, status = 200)
+        
+        
+        
+    except Exception as e:
+        return JsonResponse({'message' : str(e)}, status = 400)
+    
+def delete_task(request,id):
+    try:
+        if request.method != 'DELETE':
+            raise Exception(f'{request.method}, Method not allowed')
+        
+        if not Task.objects.filter(id = id).exists():
+            raise Exception('Task does not exist')
+        
+        task = Task.objects.get(id = id)
+        task.delete()
+        
+        return JsonResponse({'message': "Task deleted Successfuly"},status = 200)
+        
+    
+    except Exception as e:
+        return JsonResponse({'message' : str(e)}, status = 400)    
+
+
+def list_all_task(request):
+
+    try:
+        
+        if request.method != 'GET':
+            raise Exception(f'{request.method}, Method not allowed')
+        
+        tasks = Task.objects.all()
+        
+        data = []
+        
+        for task in tasks:
+            data.append(model_to_dict(task))
+        
+        # data = [model_to_dict(task) for task in tasks]
+        
+        return JsonResponse({'message ': data}, status = 200)
+    
+    except Exception as e:
+        
+        return JsonResponse({'message' : str(e)}, status = 400)  
+        
+        
+                
+                
+                
+                
