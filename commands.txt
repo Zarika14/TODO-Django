@@ -1,0 +1,32 @@
+# create repo --- 
+
+# .env
+# .gitignore
+# requirements.txt
+# virtual env : python -m venv name
+# activate : ./name/Scripts/activate
+
+
+# pip install django
+# django-admin startproject name .
+
+# pip freeze > requirements.txt     -> to write into requirements.txt 
+
+# pip install python-dotenv 
+
+# in settings.py 
+# from dotenv import load_dotenv
+# import os
+# load_dotenv()
+
+# setup .env file keys and values
+
+
+# to get values from .env file into our project
+
+os.getenv('key') 
+
+# python manage.py runserver :- to check if everythings working fine
+
+# python manage.py startapp name
+# in settings.py installed apps add appname
